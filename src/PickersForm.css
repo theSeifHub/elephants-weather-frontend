@@ -3,6 +3,7 @@ form {
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+  width:-moz-fit-content;
   width:fit-content;
   height: 200px;
   margin: 5em auto 1em;
@@ -12,7 +13,7 @@ form {
 }
 
 .picker {
-  width: 150px;
+  width: 200px;
   height: 40px;
   line-height: 40px;
   /*color: #282c34;*/
@@ -42,4 +43,22 @@ button[type="submit"] {
   border-radius: 2px;
   text-align:center;
   box-shadow: 3px 3px #777;
+}
+
+@media (max-width: 465px) {
+  form {
+    width: 100%;
+    height: 250px;
+  }
+  form div {
+    width: 80%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+  }
+  label:first-child {
+    margin-right: 0;
+  }
 }

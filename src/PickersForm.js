@@ -4,24 +4,22 @@ import DateOption from "./DateOption"
 import "./PickersForm.css"
 
 
-function PickersForm({ changeResultDisplayTo }) {
-  // saveWeather
-
+function PickersForm({ changeResultDisplayTo, saveWeather }) {
   // create date options for select tag
   const createDateOptions = () => {
     const days = [];
-    const todayObj = new Date(Date.now());
-    // Starting 6 days ago to get an array of days in order
-    todayObj.setDate(todayObj.getDate() - 6)
-    // 13 days = 5 last days + today + next 7 days
-    for (let i = 0; i < 13; i += 1) {
+    const todayObj = new Date();
+    // Starting 5 days ago to get an array of days in order
+    todayObj.setDate(todayObj.getDate() - 5)
+    // 12 = 4 last days + today + next 7 days
+    for (let i = 0; i < 12; i += 1) {
       let isSelected = false;
       const milliseconds = todayObj.setDate(todayObj.getDate() + 1);
       const dateString = new Date(milliseconds).toDateString();
       // dmy stands for: day, month, year
       let [weekDay, ...dmy] = dateString.split(" ");
       dmy = dmy.join("-");
-      // select 
+      // select todays date and make default selection
       if (dateString === new Date(Date.now()).toDateString()) {
         isSelected = true;
         weekDay = `Today ${weekDay}`
@@ -66,27 +64,26 @@ function PickersForm({ changeResultDisplayTo }) {
   const submitForm = async (locationQuery, dateQuery) => {
     let res = await fetch(`http://localhost:5000/${locationQuery}/${dateQuery}`);
     res = await res.json();
-    console.log("response");
-    console.log(res);
     return res;
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // turn on loading 
     changeResultDisplayTo("loading");
-    console.log("handling submit"); //! 4DEBUGAAA
+
     const dateQuery = document.getElementById("date").value;
     const res = await submitForm(location, dateQuery);
-    console.log("res in handleSubmit");//! 4DEBUGAAA
-    console.log(res);//! 4DEBUGAAA
-    changeResultDisplayTo("result");
-    console.log("You submitted")//! 4DEBUGAAA
+
+    if (res.requestSuccess || res.message === "Success") {
+      saveWeather(res);
+      changeResultDisplayTo("result");
+    } else {
+      changeResultDisplayTo("failure");
+    }
   }
 
-
-  // const dateOptions = ;
-
-
+  //! COMPONENT UI ##################
   return (
     <form onSubmit={handleSubmit}>
       <div>
@@ -124,14 +121,15 @@ function PickersForm({ changeResultDisplayTo }) {
   )
 }
 
+
 // Prop types validation
 PickersForm.defaultProps = {
   changeResultDisplayTo: () => null,
-  // saveWeather: () => null
+  saveWeather: () => null
 }
 PickersForm.propTypes = {
   changeResultDisplayTo: PropTypes.func,
-  // saveWeather: PropTypes.func
+  saveWeather: PropTypes.func
 }
 
-export default PickersForm
+export default PickersForm;

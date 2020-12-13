@@ -4,11 +4,16 @@
   align-items: center;
   justify-content: space-around;
   background-color: rgba(200, 200, 200, 0.4);
-  width: 365px;
+  width: 475px;
   height: 300px;
   margin: 0 auto;
-  padding: 0 25px;
+  padding: 25px;
   border-radius: 10px;
+}
+@media (max-width: 375px) {
+  .result {
+    width: 100%;
+  }
 }
 /* Propagating Loader */
 .lds-ripple {
@@ -42,4 +47,10 @@
     height: 72px;
     opacity: 0;
   }
+}
+
+/* Failure screen */
+.moonface {
+  line-height:15px;
+  font-size: 100px;
 }
